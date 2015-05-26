@@ -223,7 +223,7 @@ export function generate(options: Options, sendMessage: (message: string) => voi
 				}
 			});
 
-			output.write(content.replace(nonEmptyLineStart, '$&' + indent));
+			output.write(content.replace(nonEmptyLineStart, '$&' + indent).replace(/    /g, indent));
 			output.write(eol + '}' + eol);
 		}
 		else {
