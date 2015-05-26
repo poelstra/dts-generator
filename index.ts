@@ -17,6 +17,8 @@ interface Options {
 	includes?: string[];
 	indent?: string;
 	main?: string;
+	es6: boolean;
+	es6default: boolean;
 	name: string;
 	out: string;
 	target?: ts.ScriptTarget;
@@ -175,8 +177,16 @@ export function generate(options: Options, sendMessage: (message: string) => voi
 
 		if (options.main) {
 			output.write(`declare module '${options.name}' {` + eol + indent);
-			output.write(`import main = require('${options.main}');` + eol + indent);
-			output.write('export = main;' + eol);
+			if (options.es6) {
+				output.write(`export * from '${options.main}';` + eol);
+				if (options.es6default) {
+					output.write(indent + `export { default as default } from '${options.main}';` + eol);
+				}
+			}
+			else {
+				output.write(`import main = require('${options.main}');` + eol + indent);
+				output.write('export = main;' + eol);
+			}
 			output.write('}' + eol);
 			sendMessage(`Aliased main module ${options.name} to ${options.main}`);
 		}

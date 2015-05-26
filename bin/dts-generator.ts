@@ -7,6 +7,11 @@ var kwArgs:{
 	files: string[];
 } = { files: [] };
 
+var booleanFlags = {
+	es6: true,
+	es6default: true
+};
+
 for (var i = 2, j = process.argv.length; i < j; ++i) {
 	var arg = process.argv[i];
 
@@ -28,6 +33,10 @@ for (var i = 2, j = process.argv.length; i < j; ++i) {
 			}
 
 			kwArgs.externs.push(value);
+		}
+		else if (key in booleanFlags) {
+			--i;
+			kwArgs[key] = true;
 		}
 		else {
 			kwArgs[key] = value;
